@@ -24,6 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.TextFile;
+import rmi.Service;
 
 public class Client extends Application implements Initializable {
 	
@@ -47,7 +48,7 @@ public class Client extends Application implements Initializable {
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = (Parent) FXMLLoader.load(getClass().getResource("fxml/Client.fxml"));
 		
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(root, 100, 100);
 		
 		primaryStage.setTitle("SisalPad");
 		primaryStage.setScene(scene);
