@@ -3,18 +3,42 @@ package view;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 
+import controller.ClientController;
 import controller.fxml.SetServerDialogController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Client extends Application {
+	
+	ClientController clientController;
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
 
 	@Override
-	public void start(Stage primaryStage) throws IOException, NotBoundException {
+	public void start(Stage primaryStage) throws IOException, NotBoundException {		
+		setServerDialog(primaryStage);		
+		
+		Parent root = (Parent) FXMLLoader.load(getClass().getResource("fxml/Client.fxml"));
+		
+		Scene scene = new Scene(root);
+		
+		primaryStage.setTitle("SisalPad");
+		primaryStage.setScene(scene);
+		primaryStage.show();		
+		
+		primaryStage.setOnCloseRequest(event -> {
+			System.exit(0);
+		});		
+	}	
+	
+	private void setServerDialog(Stage primaryStage) throws IOException, NotBoundException {		
 		FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Client.class.getResource("fxml/SetServerDialog.fxml"));
 		AnchorPane page = (AnchorPane) loader.load();		
@@ -30,25 +54,8 @@ public class Client extends Application {
 		
 		SetServerDialogController setServerDialogController = loader.getController();
 		setServerDialogController.setDialog(dialog);
-		dialog.showAndWait();
 		
-		System.out.println(setServerDialogController.getIp());
-		/*
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("fxml/Client.fxml"));
-		
-		Scene scene = new Scene(root);
-		
-		primaryStage.setTitle("SisalPad");
-		primaryStage.setScene(scene);
-		primaryStage.show();		
-		
-		primaryStage.setOnCloseRequest(event -> {
-			System.exit(0);
-		});
-		*/
-	}
-	
-	public static void main(String[] args) {
-		launch(args);
+		dialog.showAndWait();	
+		clientController = new ClientController(setServerDialogController.getIp(), setServerDialogController.getPort());
 	}
 }
