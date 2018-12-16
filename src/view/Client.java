@@ -32,6 +32,8 @@ public class Client extends Application {
 		
 		primaryStage.setTitle("SisalPad");
 		primaryStage.setScene(scene);
+		primaryStage.setMinHeight(438);
+		primaryStage.setMinWidth(320);
 		primaryStage.show();		
 	}	
 	
