@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="532.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.fxml.HomePageController">
+   <children>
+      <MenuBar layoutY="2.0" prefWidth="532.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#newMenuOnAction" text="New" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="infoMenuItem" mnemonicParsing="false" onAction="#infoMenuOnAction" text="Info" />
+                  <MenuItem fx:id="colaboratorsMenuItem" mnemonicParsing="false" onAction="#colaboratorsMenuOnAction" text="Colaborators" />
+              <MenuItem fx:id="deleteMenuItem" mnemonicParsing="false" onAction="#deleteMenuOnAction" text="Delete" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+              <MenuItem mnemonicParsing="false" onAction="#closeMenuOnAction" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+                  <CheckMenuItem fx:id="checkWrapMenuItem" mnemonicParsing="false" onAction="#wrapOnAction" text="Text Wrapping" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TextArea fx:id="textArea" layoutX="166.0" layoutY="100.0" prefHeight="347.0" prefWidth="532.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0" />
+      <TabPane fx:id="tabPane" layoutX="14.0" layoutY="14.0" onMouseClicked="#tabPaneOnAction" prefHeight="31.0" prefWidth="532.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="345.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0" />
+   </children>
+</AnchorPane>

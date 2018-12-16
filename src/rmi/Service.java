@@ -25,4 +25,19 @@ public interface Service extends Remote {
 	 */
 	public ArrayList<TextFile> getUserFiles(String user) throws RemoteException;
 	
+	/**
+	 * Removes file that have informed id
+	 * @param id File id
+	 * @return Removed file
+	 */
+	public TextFile removeFile(int id) throws RemoteException;
+	
+	/**
+	 * Gets a file by id
+	 * @param id File id
+	 * @return TextFile
+	 * @throws RemoteException
+	 */
+	public TextFile getFile(int id) throws RemoteException;
+	
 }

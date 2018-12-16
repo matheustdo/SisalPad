@@ -38,4 +38,16 @@ public class Servant extends UnicastRemoteObject implements Service {
 		return userFiles;
 	}
 
+	@Override
+	public TextFile removeFile(int id) throws RemoteException {
+		TextFile textFile = textFiles.get(id);
+		textFiles.remove(id);
+		return textFile;
+	}
+
+	@Override
+	public TextFile getFile(int id) throws RemoteException {
+		return textFiles.get(id);
+	}
+
 }

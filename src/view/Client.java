@@ -3,8 +3,7 @@ package view;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 
-import controller.ClientController;
-import controller.fxml.SetServerDialogController;
+import controller.fxml.StartupDialogController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,36 +14,38 @@ import javafx.stage.Stage;
 
 public class Client extends Application {
 	
-	ClientController clientController;
-	
 	public static void main(String[] args) {
 		launch(args);
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws IOException, NotBoundException {		
+	public void start(Stage primaryStage) throws IOException, NotBoundException {	
+		primaryStage.setOnCloseRequest(event -> {
+			System.exit(0);
+		});		
+		
 		setServerDialog(primaryStage);		
 		
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("fxml/Client.fxml"));
+		Parent root = (Parent) FXMLLoader.load(getClass().getResource("fxml/HomePage.fxml"));
 		
 		Scene scene = new Scene(root);
 		
 		primaryStage.setTitle("SisalPad");
 		primaryStage.setScene(scene);
 		primaryStage.show();		
-		
-		primaryStage.setOnCloseRequest(event -> {
-			System.exit(0);
-		});		
 	}	
 	
 	private void setServerDialog(Stage primaryStage) throws IOException, NotBoundException {		
 		FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Client.class.getResource("fxml/SetServerDialog.fxml"));
+        loader.setLocation(Client.class.getResource("fxml/StartupDialog.fxml"));
 		AnchorPane page = (AnchorPane) loader.load();		
 				
-		Scene scene = new Scene(page, 200, 150);
+		Scene scene = new Scene(page, 200, 185);
 		Stage dialog = new Stage();
+		
+		dialog.setOnCloseRequest(event -> {
+			System.exit(0);
+		});
 		
 		dialog.initModality(Modality.WINDOW_MODAL);
 		dialog.initOwner(primaryStage);		
@@ -52,10 +53,10 @@ public class Client extends Application {
 		dialog.setScene(scene);
 		dialog.setResizable(false);
 		
-		SetServerDialogController setServerDialogController = loader.getController();
+		StartupDialogController setServerDialogController = loader.getController();
 		setServerDialogController.setDialog(dialog);
 		
-		dialog.showAndWait();	
-		clientController = new ClientController(setServerDialogController.getIp(), setServerDialogController.getPort());
+		dialog.showAndWait();
 	}
+	
 }
