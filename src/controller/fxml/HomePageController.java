@@ -48,8 +48,7 @@ public class HomePageController implements Observer, Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		tabPane.setTabMinWidth(70);
 		tabPane.setTabMaxWidth(70);		
-		infoMenuItem.setDisable(true);
-		removeOwner();
+		loadFile();
 	}
     
     @FXML
@@ -75,8 +74,7 @@ public class HomePageController implements Observer, Initializable {
 		newTextDialog.addObserver(this);
 		newTextDialog.setDialog(dialog);
 		
-		dialog.showAndWait();
-		setOwner();
+		dialog.showAndWait();		
     }
     
     @FXML
@@ -100,10 +98,15 @@ public class HomePageController implements Observer, Initializable {
     		}    		
     	}
     	
-    	ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
+    	if(tabPane.getSelectionModel().getSelectedItem() != null ) {
+    		ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
+    	} else {
+    		ClientController.openedTextFile = null;
+    	}
+    	
     	ClientController.removeFile(id);
+    	loadFile();
     }
-    
     
     @FXML
     void closeMenuOnAction(ActionEvent event) {
@@ -111,15 +114,10 @@ public class HomePageController implements Observer, Initializable {
     }
     
     @FXML
-    void tabPaneOnAction(MouseEvent event) throws NumberFormatException, RemoteException {
-    	if(ClientController.openedTextFile.getOwner().equals(ClientController.user)) {
-    		setOwner();
-    	} else {
-    		removeOwner();
-    	}
-    	
+    void tabPaneOnAction(MouseEvent event) throws NumberFormatException, RemoteException {	
     	textArea.setText(ClientController.openedTextFile.getText());
     	ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
+    	loadFile();
     }    
 
 	@Override
@@ -130,6 +128,25 @@ public class HomePageController implements Observer, Initializable {
 			tab.setId(ClientController.openedTextFile.getId() + "");
 			tabPane.getTabs().add(tab);
 			tabPane.getSelectionModel().select(tab);
+			loadFile();
+		}
+	}
+	
+	private void loadFile() {
+		System.out.println(ClientController.openedTextFile);
+		if(ClientController.openedTextFile != null) {
+			infoMenuItem.setDisable(false);
+			textArea.setVisible(true);
+			textArea.setText(ClientController.openedTextFile.getText());
+			if(ClientController.openedTextFile.getOwner().equals(ClientController.user)) {
+				setOwner();
+			} else {
+				removeOwner();
+			}
+		} else {
+			textArea.setVisible(false);
+			infoMenuItem.setDisable(true);
+			removeOwner();
 		}
 	}
 	
