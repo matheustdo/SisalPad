@@ -4,6 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import javafx.scene.control.IndexRange;
 import model.TextFile;
 
 public interface Service extends Remote {
@@ -39,5 +40,14 @@ public interface Service extends Remote {
 	 * @throws RemoteException
 	 */
 	public TextFile getFile(int id) throws RemoteException;
+	
+	/**
+	 * Inserts a text into a text file at index range
+	 * @param range Index range
+	 * @param id Text id
+	 * @return Text inserted
+	 * @throws RemoteException
+	 */
+	public String addChar(IndexRange range, String text, int id) throws RemoteException;
 	
 }

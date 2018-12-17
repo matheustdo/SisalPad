@@ -5,12 +5,11 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="532.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.fxml.HomePageController">
+<AnchorPane prefHeight="400.0" prefWidth="532.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.fxml.HomePageController">
    <children>
       <MenuBar layoutY="2.0" prefWidth="532.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -37,10 +36,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TextArea fx:id="textArea" layoutX="166.0" layoutY="176.0" prefHeight="224.0" prefWidth="532.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0" />
-      <TabPane fx:id="tabPane" layoutX="14.0" layoutY="14.0" onMouseClicked="#tabPaneOnAction" prefHeight="31.0" prefWidth="532.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="345.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
-         <tabs>
-            <Tab text="Untitled Tab" />
-         </tabs></TabPane>
+      <TabPane fx:id="tabPane" layoutX="14.0" layoutY="14.0" onMouseClicked="#tabPaneOnAction" prefHeight="31.0" prefWidth="532.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0" />
+      <TextArea fx:id="textArea" layoutX="166.0" layoutY="55.0" prefHeight="345.0" prefWidth="532.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="56.0" />
    </children>
 </AnchorPane>

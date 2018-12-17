@@ -48,7 +48,19 @@ public class HomePageController implements Observer, Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		tabPane.setTabMinWidth(70);
 		tabPane.setTabMaxWidth(70);		
+		
 		loadFile();
+		/*
+		textArea.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				System.out.println(observable.getValue());
+			}
+		});*/
+		
+		textArea.textProperty().addListener((obs, oldText, newText) -> {
+			System.out.println();
+		});
 	}
     
     @FXML
@@ -115,9 +127,11 @@ public class HomePageController implements Observer, Initializable {
     
     @FXML
     void tabPaneOnAction(MouseEvent event) throws NumberFormatException, RemoteException {	
-    	textArea.setText(ClientController.openedTextFile.getText());
-    	ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
-    	loadFile();
+    	if(!tabPane.getSelectionModel().isEmpty()) {
+    		textArea.setText(ClientController.openedTextFile.getText());
+        	ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
+        	loadFile();
+    	}    	
     }    
 
 	@Override
@@ -132,8 +146,7 @@ public class HomePageController implements Observer, Initializable {
 		}
 	}
 	
-	private void loadFile() {
-		System.out.println(ClientController.openedTextFile);
+	private void loadFile() {		
 		if(ClientController.openedTextFile != null) {
 			infoMenuItem.setDisable(false);
 			textArea.setVisible(true);
