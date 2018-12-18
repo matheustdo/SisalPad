@@ -18,6 +18,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.Clipboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -25,6 +26,9 @@ import javafx.stage.Stage;
 import view.Client;
 
 public class HomePageController implements Observer, Initializable {
+	
+	@FXML
+    private AnchorPane anchorPane;
 	
 	@FXML
     private MenuItem infoMenuItem;
@@ -50,17 +54,23 @@ public class HomePageController implements Observer, Initializable {
 		tabPane.setTabMaxWidth(70);		
 		
 		loadFile();
-		/*
-		textArea.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				System.out.println(observable.getValue());
-			}
-		});*/
 		
-		textArea.textProperty().addListener((obs, oldText, newText) -> {
-			System.out.println();
-		});
+		textArea = new TextArea() {
+			@Override
+            public void paste() {
+                Clipboard clipboard = Clipboard.getSystemClipboard();
+                if (clipboard.hasString()) {
+                    replaceSelection(clipboard.getString());
+                }
+            }
+		};
+		
+		textArea.setVisible(false);
+		anchorPane.getChildren().add(textArea);
+		AnchorPane.setLeftAnchor(textArea, 0.0);
+		AnchorPane.setRightAnchor(textArea, 0.0);
+		AnchorPane.setBottomAnchor(textArea, 0.0);
+		AnchorPane.setTopAnchor(textArea, 56.0);
 	}
     
     @FXML
