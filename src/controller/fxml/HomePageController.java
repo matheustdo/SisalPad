@@ -79,16 +79,16 @@ public class HomePageController implements Observer, Initializable {
 		textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
+            	IndexRange a = textArea.getSelection();
             	if(event.getCode() == KeyCode.PASTE) {
             		System.out.println("PASTE");
             	} else if (event.getCode() == KeyCode.BACK_SPACE) {
-            		System.out.println("BACKSPACE");
+
             	} else if (event.getCode() == KeyCode.COPY) {
             		System.out.println("COPY");
             	} else if (event.getCode() == KeyCode.DELETE) {
-            		System.out.println("DELETE");
-            	} else {
-            		IndexRange a = textArea.getSelection();
+
+            	} else {            		
                     ClientController.openedTextFile.insertTextAtRange(a.getStart(), a.getEnd(), event.getText());
             	}             	
             }
