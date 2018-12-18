@@ -45,7 +45,7 @@ public interface Service extends Remote {
 	 * Inserts a text into a text file at index range
 	 * @param range Index range
 	 * @param id Text id
-	 * @return Text inserted
+	 * @return Text Text to insert
 	 * @throws RemoteException
 	 */
 	public String addChar(IndexRange range, String text, int id) throws RemoteException;

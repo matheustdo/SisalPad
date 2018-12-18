@@ -54,8 +54,9 @@ public class Servant extends UnicastRemoteObject implements Service {
 	@Override
 	public String addChar(IndexRange range, String text, int id) throws RemoteException {
 		TextFile textFile = textFiles.get(id);
-		textFile.getText();
-		return null;
+		int start = range.getStart();
+		int end = range.getEnd();
+		return text;
 	}
 
 }

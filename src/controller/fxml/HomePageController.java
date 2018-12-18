@@ -9,16 +9,20 @@ import java.util.ResourceBundle;
 
 import controller.ClientController;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.IndexRange;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -71,6 +75,24 @@ public class HomePageController implements Observer, Initializable {
 		AnchorPane.setRightAnchor(textArea, 0.0);
 		AnchorPane.setBottomAnchor(textArea, 0.0);
 		AnchorPane.setTopAnchor(textArea, 56.0);
+		
+		textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+            	if(event.getCode() == KeyCode.PASTE) {
+            		System.out.println("PASTE");
+            	} else if (event.getCode() == KeyCode.BACK_SPACE) {
+            		System.out.println("BACKSPACE");
+            	} else if (event.getCode() == KeyCode.COPY) {
+            		System.out.println("COPY");
+            	} else if (event.getCode() == KeyCode.DELETE) {
+            		System.out.println("DELETE");
+            	} else {
+            		IndexRange a = textArea.getSelection();
+                    ClientController.openedTextFile.insertTextAtRange(a.getStart(), a.getEnd(), event.getText());
+            	}             	
+            }
+        });
 	}
     
     @FXML
@@ -155,6 +177,14 @@ public class HomePageController implements Observer, Initializable {
 			loadFile();
 		}
 	}
+	
+	@FXML
+    void textOnKeyTyped(KeyEvent event) {
+		IndexRange i = textArea.getSelection();
+		System.out.println(event.getCharacter());
+		ClientController.openedTextFile.insertTextAtRange(i.getStart(), i.getStart(), "c");
+    }
+
 	
 	private void loadFile() {		
 		if(ClientController.openedTextFile != null) {

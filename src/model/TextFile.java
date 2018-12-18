@@ -18,6 +18,7 @@ public class TextFile implements Serializable {
 		this.id = counter++;
 		this.name = name;
 		this.owner = owner;
+		this.text = "";
 		this.users = new ArrayList<String>();
 	}
 
@@ -47,6 +48,17 @@ public class TextFile implements Serializable {
 
 	public String getOwner() {
 		return owner;
+	}
+	
+	public void insertTextAtRange(int start, int end, String text) {
+		if(this.text == null) {
+			this.text = text;
+		} else {
+			String startString = this.text.substring(0, start);
+			String endString = this.text.substring(end, this.text.length());
+			this.text = startString + text + endString;
+		}
+		System.out.println(this.text);
 	}
 
 }
