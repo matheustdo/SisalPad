@@ -3,7 +3,6 @@ package view;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 
-import controller.fxml.StartupDialogController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

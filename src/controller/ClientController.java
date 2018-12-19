@@ -6,8 +6,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javafx.scene.control.IndexRange;
 import model.TextFile;
@@ -45,7 +43,7 @@ public class ClientController {
 	}
 	
 	public static void setUpService(String serverIP, int serverPort, String userID) throws IOException, NotBoundException {
-		Registry registry = LocateRegistry.getRegistry(serverPort);
+		Registry registry = LocateRegistry.getRegistry(serverIP, serverPort);		
 		service = (Service) registry.lookup("TextEditor");
 		user = userID;
 	}	

@@ -10,6 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import controller.ClientController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -60,6 +61,7 @@ public class HomePageController implements Observer, Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		tabPane.setTabMinWidth(70);
 		tabPane.setTabMaxWidth(70);		
+		tabPane.setStyle("-fx-open-tab-animation: NONE; -fx-close-tab-animation: NONE;");
 		
 		openFile();
 		
@@ -143,6 +145,7 @@ public class HomePageController implements Observer, Initializable {
 		}
 		
 		openedFileUpdater();
+		userFilesUpdater();
 	}
     
     @FXML
@@ -279,7 +282,6 @@ public class HomePageController implements Observer, Initializable {
 		if(ClientController.openedTextFile != null) {
 			infoMenuItem.setDisable(false);
 			textArea.setVisible(true);
-			textArea.setText(ClientController.openedTextFile.getText());
 			if(ClientController.openedTextFile.getOwner().equals(ClientController.getUser())) {
 				setOwner();
 			} else {
@@ -311,19 +313,91 @@ public class HomePageController implements Observer, Initializable {
 				if(ClientController.openedTextFile != null) {
 					try {
 						IndexRange range = textArea.getSelection();
-						Double scrollValue = textArea.scrollTopProperty().get();
+						Double scrollTopValue = textArea.scrollTopProperty().get();
+						Double scrollLeftValue = textArea.scrollLeftProperty().get();
 						ClientController.changeOpened(ClientController.openedTextFile.getId());
-						textArea.setText(ClientController.openedTextFile.getText());
-						textArea.positionCaret(range.getStart());
-						textArea.selectPositionCaret(range.getEnd());
-						textArea.setScrollTop(scrollValue);
+						if(ClientController.openedTextFile != null) {
+							textArea.setText(ClientController.openedTextFile.getText());		
+							textArea.selectRange(range.getStart(), range.getEnd());
+							textArea.setScrollTop(scrollTopValue);
+							textArea.setScrollLeft(scrollLeftValue);
+						}
+						openFile();						
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}					
 				}
 			}
-		}, 200, 200);
+		}, 200, 200);		
+	}
+	
+	private void userFilesUpdater() {
+		Timer timer = new Timer();
 		
+		timer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				Platform.runLater(() -> {
+					if(ClientController.openedTextFile != null) {
+						try {
+							String selected = tabPane.getSelectionModel().getSelectedItem().getId();
+							
+							TabPane tabPaneAux = tabPane;
+							tabPaneAux.getTabs().clear();
+							
+							for(TextFile textFile: ClientController.getUserFiles()) {
+								Tab tab = new Tab("(" + textFile.getId() + ") " + textFile.getName());
+								tab.setId(textFile.getId() + "");
+								tabPaneAux.getTabs().add(tab);
+							}
+
+							tabPane = tabPaneAux;
+							boolean hasFile = false;
+							for(Tab tab: tabPane.getTabs()) {
+								if(tab.getId().equals(selected)) {
+									tabPane.getSelectionModel().select(tab);
+									hasFile = true;
+									break;
+								}
+							}
+							
+							/*
+							if(!hasFile) {
+								if(!tabPane.getTabs().isEmpty()) {
+									tabPane.getSelectionModel().select(0);
+									ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
+								}								
+							}*/
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}					
+					} else {						
+						try {
+							TabPane tabPaneAux = tabPane;
+							tabPaneAux.getTabs().clear();
+							
+							for(TextFile textFile: ClientController.getUserFiles()) {
+								Tab tab = new Tab("(" + textFile.getId() + ") " + textFile.getName());
+								tab.setId(textFile.getId() + "");
+								tabPaneAux.getTabs().add(tab);
+							}
+							
+							tabPane = tabPaneAux;
+							
+							if(!tabPane.getTabs().isEmpty() && ClientController.openedTextFile == null) {
+								ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
+							}
+							
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}					
+					}
+					
+					openFile();
+				});				
+			}
+				
+		}, 200, 200);
 	}
     
 }
