@@ -301,13 +301,6 @@ public class HomePageController implements Observer, Initializable {
 		}
 	}
 	
-	@FXML
-    void textOnKeyTyped(KeyEvent event) {
-		IndexRange i = textArea.getSelection();
-		System.out.println(event.getCharacter());
-		ClientController.openedTextFile.insertTextAtRange(i.getStart(), i.getStart(), "c");
-    }
-	
 	private void loadFiles() throws RemoteException {
 		for(TextFile textFile: ClientController.getUserFiles()) {
 			Tab tab = new Tab("(" + textFile.getId() + ") " + textFile.getName());
@@ -354,23 +347,30 @@ public class HomePageController implements Observer, Initializable {
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				if(ClientController.openedTextFile != null) {
-					try {
-						IndexRange range = textArea.getSelection();
-						Double scrollTopValue = textArea.scrollTopProperty().get();
-						Double scrollLeftValue = textArea.scrollLeftProperty().get();
-						ClientController.changeOpened(ClientController.openedTextFile.getId());
-						if(ClientController.openedTextFile != null) {
-							textArea.setText(ClientController.openedTextFile.getText());		
-							textArea.selectRange(range.getStart(), range.getEnd());
-							textArea.setScrollTop(scrollTopValue);
-							textArea.setScrollLeft(scrollLeftValue);
-						}
-						openFile();						
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					}					
+				IndexRange range = textArea.getSelection();
+				Double scrollTopValue = textArea.scrollTopProperty().get();
+				Double scrollLeftValue = textArea.scrollLeftProperty().get();
+				
+				try {
+					Tab tab = tabPane.getSelectionModel().getSelectedItem();
+					
+					if(tab != null) {
+						ClientController.changeOpened(Integer.parseInt(tab.getId()));
+					} else {
+						ClientController.openedTextFile = null;
+					}
+				} catch (RemoteException e1) {
+					e1.printStackTrace();
 				}
+				
+				if(ClientController.openedTextFile != null) {
+					textArea.setText(ClientController.openedTextFile.getText());		
+					textArea.selectRange(range.getStart(), range.getEnd());
+					textArea.setScrollTop(scrollTopValue);
+					textArea.setScrollLeft(scrollLeftValue);
+				}
+				
+				openFile();
 			}
 		}, 200, 200);		
 	}
