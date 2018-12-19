@@ -88,55 +88,102 @@ public class HomePageController implements Observer, Initializable {
 		AnchorPane.setBottomAnchor(textArea, 0.0);
 		AnchorPane.setTopAnchor(textArea, 56.0);
 		
-		// Controls input
-		textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-            	IndexRange range = textArea.getSelection();
-            	if (event.getCode() == KeyCode.BACK_SPACE) {
-            		try {
-						ClientController.backspaceDelete(range);
+		if(System.getProperty("os.name").contains("Linux")) {
+			// Controls input
+			textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
+	            @Override
+	            public void handle(KeyEvent event) {
+	            	IndexRange range = textArea.getSelection();
+	            	System.out.println(range);
+	            	System.out.println(ClientController.openedTextFile.getText().length());
+	            	if (event.getCode() == KeyCode.BACK_SPACE) {
+	            		try {
+							ClientController.backspaceDelete(range);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+	            	} else if (event.getCode() == KeyCode.DELETE) {
+	            		try {
+							ClientController.delDelete(range);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+	            	} else if (event.getCode() == KeyCode.ENTER) {
+	            		try {                    	
+							ClientController.addText(range, System.getProperty("line.separator"));
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+	            	} else if (!event.getCode().isArrowKey() && 
+		            		   !event.getCode().isFunctionKey() &&
+		            		   !event.getCode().isMediaKey() &&
+		            		   !event.getCode().isNavigationKey() &&
+		            		   !event.isControlDown()) {            		
+	                    try {
+							ClientController.addText(range, event.getText());						
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+	            	}             	
+	            }
+	        });
+			
+			// Solves accentuation input
+			textArea.setOnInputMethodTextChanged(new EventHandler<InputMethodEvent>() {
+				@Override
+				public void handle(InputMethodEvent event) {
+					try {
+						ClientController.addText(textArea.getSelection(), event.getCommitted());
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}
-            	} else if (event.getCode() == KeyCode.DELETE) {
-            		try {
-						ClientController.delDelete(range);
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					}
-            	} else if (event.getCode() == KeyCode.ENTER) {
-            		try {                    	
-						ClientController.addText(range, System.getProperty("line.separator"));
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					}
-            	} else if (!event.getCode().isArrowKey() && 
-	            		   !event.getCode().isFunctionKey() &&
-	            		   !event.getCode().isMediaKey() &&
-	            		   !event.getCode().isNavigationKey() &&
-	            		   !event.isControlDown()) {            		
-                    try {
-						ClientController.addText(range, event.getText());						
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					}
-            	}             	
-            }
-        });
-		
-		// Solves accentuation input
-		textArea.setOnInputMethodTextChanged(new EventHandler<InputMethodEvent>() {
-			@Override
-			public void handle(InputMethodEvent event) {
-				try {
-					ClientController.addText(textArea.getSelection(), event.getCommitted());
-				} catch (RemoteException e) {
-					e.printStackTrace();
+					textArea.insertText(textArea.getCaretPosition(), event.getCommitted());
 				}
-				textArea.insertText(textArea.getCaretPosition(), event.getCommitted());
-			}
-		});
+			});
+		}		
+		
+		if(System.getProperty("os.name").contains("Windows")) {
+			textArea.setOnKeyTyped(new EventHandler<KeyEvent>() {				
+	            @Override
+	            public void handle(KeyEvent event) {
+	            	System.out.println(event.isControlDown());
+	            	IndexRange range = textArea.getSelection();
+	            	if(!event.getCharacter().isEmpty()) {
+	            		try {
+							ClientController.addText(range, event.getCharacter());
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}	
+	            	}	            	
+	            }
+	        });
+			
+			textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
+	            @Override
+	            public void handle(KeyEvent event) {
+	            	IndexRange range = textArea.getSelection();
+	            	if (event.getCode() == KeyCode.BACK_SPACE) {
+	            		try {
+							ClientController.backspaceDelete(range);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+	            	} else if (event.getCode() == KeyCode.DELETE) {
+	            		try {
+							ClientController.delDelete(range);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+	            	} else if (event.getCode() == KeyCode.ENTER) {
+	            		try {
+							ClientController.addText(range, "\n");
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
+	            	}
+	            }
+	        });
+		}
 		
 		try {
 			loadFiles();
