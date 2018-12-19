@@ -55,9 +55,6 @@ public class Client extends Application {
 		dialog.setScene(scene);
 		dialog.setResizable(false);
 		
-		StartupDialogController setServerDialogController = loader.getController();
-		setServerDialogController.setDialog(dialog);
-		
 		dialog.showAndWait();
 	}
 	

@@ -23,20 +23,20 @@ public class StartupDialogController {
     
     @FXML
     private TextField userIdTextField;
-    
-    private Stage dialog;
 
     @FXML
-    void beginButtonOnAction(ActionEvent event) throws IOException, NotBoundException {
-    	String user = userIdTextField.getText();
-	    String ip = serverIpTextField.getText();
-	    int port = Integer.parseInt(serverPortTextField.getText());
-	    ClientController.setUpService(ip, port, user);
-	    this.dialog.close();
-    }
-    
-    public void setDialog(Stage dialog) {
-    	this.dialog = dialog;
+    void beginButtonOnAction(ActionEvent event) throws NotBoundException {    	
+	    try {
+	    	String user = userIdTextField.getText();
+		    String ip = serverIpTextField.getText();
+		    int port = Integer.parseInt(serverPortTextField.getText());
+			ClientController.setUpService(ip, port, user);
+			Stage dialog = (Stage) beginButton.getScene().getWindow();
+			dialog.close();
+		} catch (NumberFormatException | IOException e) {
+			serverIpTextField.setText("BINDING ERROR");
+			serverPortTextField.setText("BINDING ERROR");
+		}
     }
 	
 }

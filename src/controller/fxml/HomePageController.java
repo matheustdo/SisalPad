@@ -64,7 +64,7 @@ public class HomePageController implements Observer, Initializable {
             public void paste() {
                 Clipboard clipboard = Clipboard.getSystemClipboard();
                 if (clipboard.hasString()) {
-                	try {                    	
+                	try {	
                 		IndexRange range = textArea.getSelection();
 						ClientController.addText(range, clipboard.getString());
 					} catch (RemoteException e) {
