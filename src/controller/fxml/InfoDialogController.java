@@ -28,6 +28,7 @@ public class InfoDialogController implements Initializable {
 		idLabel.setText(ClientController.openedTextFile.getId() + "");
 		nameLabel.setText(ClientController.openedTextFile.getName());
 		ownerLabel.setText(ClientController.openedTextFile.getOwner());
+		usersTextArea.setStyle("-fx-text-fill: #ab0000;");
 		
 		String formatedUsers = new String();
 		for(String user: ClientController.openedTextFile.getUsers()) {
