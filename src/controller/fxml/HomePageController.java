@@ -64,6 +64,12 @@ public class HomePageController implements Observer, Initializable {
             public void paste() {
                 Clipboard clipboard = Clipboard.getSystemClipboard();
                 if (clipboard.hasString()) {
+                	try {                    	
+                		IndexRange range = textArea.getSelection();
+						ClientController.addText(range, clipboard.getString());
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
                     replaceSelection(clipboard.getString());
                 }
             }
@@ -98,8 +104,13 @@ public class HomePageController implements Observer, Initializable {
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}
-            	} else {            		
-                    try {                    	
+            	} else if (!event.getCode().isArrowKey() && 
+	            		   !event.getCode().isFunctionKey() &&
+	            		   !event.getCode().isMediaKey() &&
+	            		   !event.getCode().isNavigationKey() &&
+	            		   !event.getCode().isModifierKey() &&
+	            		   !event.isControlDown()) {            		
+                    try {
 						ClientController.addText(range, event.getText());
 					} catch (RemoteException e) {
 						e.printStackTrace();
