@@ -352,27 +352,19 @@ public class HomePageController implements Observer, Initializable {
 							}
 
 							tabPane = tabPaneAux;
-							boolean hasFile = false;
+							
 							for(Tab tab: tabPane.getTabs()) {
 								if(tab.getId().equals(selected)) {
 									tabPane.getSelectionModel().select(tab);
-									hasFile = true;
 									break;
 								}
 							}
-							
-							/*
-							if(!hasFile) {
-								if(!tabPane.getTabs().isEmpty()) {
-									tabPane.getSelectionModel().select(0);
-									ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
-								}								
-							}*/
 						} catch (RemoteException e) {
 							e.printStackTrace();
 						}					
 					} else {						
 						try {
+							textArea.setText("");
 							TabPane tabPaneAux = tabPane;
 							tabPaneAux.getTabs().clear();
 							
