@@ -94,8 +94,6 @@ public class HomePageController implements Observer, Initializable {
 	            @Override
 	            public void handle(KeyEvent event) {
 	            	IndexRange range = textArea.getSelection();
-	            	System.out.println(range);
-	            	System.out.println(ClientController.openedTextFile.getText().length());
 	            	if (event.getCode() == KeyCode.BACK_SPACE) {
 	            		try {
 							ClientController.backspaceDelete(range);
