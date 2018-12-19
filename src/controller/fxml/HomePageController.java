@@ -146,7 +146,6 @@ public class HomePageController implements Observer, Initializable {
 			textArea.setOnKeyTyped(new EventHandler<KeyEvent>() {				
 	            @Override
 	            public void handle(KeyEvent event) {
-	            	System.out.println(event.isControlDown());
 	            	IndexRange range = textArea.getSelection();
 	            	if(!event.getCharacter().isEmpty()) {
 	            		try {
