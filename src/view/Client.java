@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -21,7 +22,9 @@ public class Client extends Application {
 	public void start(Stage primaryStage) throws IOException, NotBoundException {	
 		primaryStage.setOnCloseRequest(event -> {
 			System.exit(0);
-		});		
+		});
+
+		primaryStage.getIcons().add(new Image("/assets/icon.png"));
 		
 		setServerDialog(primaryStage);		
 		
@@ -48,6 +51,7 @@ public class Client extends Application {
 			System.exit(0);
 		});
 		
+		dialog.getIcons().add(new Image("/assets/icon.png"));
 		dialog.initModality(Modality.WINDOW_MODAL);
 		dialog.initOwner(primaryStage);		
 		dialog.setTitle("SisalPad");
