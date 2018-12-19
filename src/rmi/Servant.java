@@ -63,19 +63,28 @@ public class Servant extends UnicastRemoteObject implements Service {
 	@Override
 	public void addText(int start, int end,  String text, int id) throws RemoteException {
 		TextFile textFile = textFiles.get(id);
-		textFile.insertTextAtRange(start, end, text);
+		
+		if(textFile != null) {
+			textFile.insertTextAtRange(start, end, text);
+		}		
 	}
 
 	@Override
 	public void deleteText(int start, int end, int id) throws RemoteException {
 		TextFile textFile = textFiles.get(id);
-		textFile.removeTextAtRange(start, end);
+		
+		if(textFile != null) {
+			textFile.removeTextAtRange(start, end);
+		}
 	}
 
 	@Override
 	public void addUsers(ArrayList<String> users, int id) throws RemoteException {
 		TextFile textFile = textFiles.get(id);
-		textFile.setUsers(users);
+		
+		if(textFile != null) {
+			textFile.setUsers(users);
+		}
 	}
 	
 	/**
@@ -93,7 +102,11 @@ public class Servant extends UnicastRemoteObject implements Service {
 			Object obj = ois.readObject();
 			
 			if(obj instanceof Map<?, ?>) {
-				textFiles = (Map<Integer, TextFile>) obj;
+				this.textFiles = (Map<Integer, TextFile>) obj;
+			}
+			
+			for(Integer key: this.textFiles.keySet()) {
+				TextFile.counter = key+1;
 			}
 			
 			ois.close(); 

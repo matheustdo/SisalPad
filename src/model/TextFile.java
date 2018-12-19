@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class TextFile implements Serializable {
 	
 	private static final long serialVersionUID = 5275929308261089338L;
-	private static int counter;
+	public static int counter;
 	
 	private int id;	
 	private String name;
