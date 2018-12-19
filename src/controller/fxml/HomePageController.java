@@ -6,6 +6,8 @@ import java.rmi.RemoteException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import controller.ClientController;
 import javafx.event.ActionEvent;
@@ -139,6 +141,8 @@ public class HomePageController implements Observer, Initializable {
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
+		
+		openedFileUpdater();
 	}
     
     @FXML
@@ -296,6 +300,30 @@ public class HomePageController implements Observer, Initializable {
 	private void removeOwner() {
 		deleteMenuItem.setDisable(true);
 		colaboratorsMenuItem.setDisable(true);
+	}
+	
+	private void openedFileUpdater() {
+		Timer timer = new Timer();
+		
+		timer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				if(ClientController.openedTextFile != null) {
+					try {
+						IndexRange range = textArea.getSelection();
+						Double scrollValue = textArea.scrollTopProperty().get();
+						ClientController.changeOpened(ClientController.openedTextFile.getId());
+						textArea.setText(ClientController.openedTextFile.getText());
+						textArea.positionCaret(range.getStart());
+						textArea.selectPositionCaret(range.getEnd());
+						textArea.setScrollTop(scrollValue);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}					
+				}
+			}
+		}, 200, 200);
+		
 	}
     
 }

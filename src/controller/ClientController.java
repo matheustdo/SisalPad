@@ -6,6 +6,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.scene.control.IndexRange;
 import model.TextFile;
@@ -46,8 +48,8 @@ public class ClientController {
 		Registry registry = LocateRegistry.getRegistry(serverPort);
 		service = (Service) registry.lookup("TextEditor");
 		user = userID;
-	}
-	
+	}	
+
 	public static void newFile(String fileName) throws RemoteException {
 		openedTextFile = service.newFile(fileName, user);
 	}
