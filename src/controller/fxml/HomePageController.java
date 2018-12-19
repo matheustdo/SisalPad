@@ -21,6 +21,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
+import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -83,6 +84,7 @@ public class HomePageController implements Observer, Initializable {
 		AnchorPane.setBottomAnchor(textArea, 0.0);
 		AnchorPane.setTopAnchor(textArea, 56.0);
 		
+		// Controls input
 		textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -109,16 +111,28 @@ public class HomePageController implements Observer, Initializable {
 	            		   !event.getCode().isFunctionKey() &&
 	            		   !event.getCode().isMediaKey() &&
 	            		   !event.getCode().isNavigationKey() &&
-	            		   !event.getCode().isModifierKey() &&
 	            		   !event.isControlDown()) {            		
                     try {
-						ClientController.addText(range, event.getText());
+						ClientController.addText(range, event.getText());						
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}
             	}             	
             }
         });
+		
+		// Solves accentuation input
+		textArea.setOnInputMethodTextChanged(new EventHandler<InputMethodEvent>() {
+			@Override
+			public void handle(InputMethodEvent event) {
+				try {
+					ClientController.addText(textArea.getSelection(), event.getCommitted());
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+				textArea.insertText(textArea.getCaretPosition(), event.getCommitted());
+			}
+		});
 		
 		try {
 			loadFiles();
@@ -217,7 +231,7 @@ public class HomePageController implements Observer, Initializable {
     
     @FXML
     void tabPaneOnAction(MouseEvent event) throws NumberFormatException, RemoteException {	
-    	if(!tabPane.getSelectionModel().isEmpty()) {
+    	if(!tabPane.getSelectionModel().isEmpty()) {    		
     		textArea.setText(ClientController.openedTextFile.getText());
         	ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
         	openFile();
@@ -226,7 +240,7 @@ public class HomePageController implements Observer, Initializable {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if(o instanceof NewTextDialogController) {
+		if(o instanceof NewTextDialogController) {			
 			textArea.setText(ClientController.openedTextFile.getText());
 			Tab tab = new Tab("(" + ClientController.openedTextFile.getId() + ") " + ClientController.openedTextFile.getName());
 			tab.setId(ClientController.openedTextFile.getId() + "");
