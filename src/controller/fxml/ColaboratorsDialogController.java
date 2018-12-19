@@ -26,7 +26,7 @@ public class ColaboratorsDialogController extends Observable implements Initiali
 		String formatedUsers = new String();
 		for(String user: ClientController.openedTextFile.getUsers()) {
 			formatedUsers += user + System.getProperty("line.separator");
-		}		
+		}
 		
 		if(formatedUsers.length() != 0) {
 			usersTextArea.setText(formatedUsers);
@@ -40,7 +40,7 @@ public class ColaboratorsDialogController extends Observable implements Initiali
     	ArrayList<String> userList = new ArrayList<String>();
     	while(usersST.hasMoreElements()) {
     		String user = usersST.nextToken();
-    		if(user.length() != 0) {
+    		if(user.length() != 0 && !userList.contains(user)) {
     			userList.add(user);
     		}    		
     	}
