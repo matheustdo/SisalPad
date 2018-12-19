@@ -147,8 +147,20 @@ public class HomePageController implements Observer, Initializable {
     }
     
     @FXML
-    void infoMenuOnAction(ActionEvent event) {
-
+    void infoMenuOnAction(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Client.class.getResource("fxml/InfoDialog.fxml"));
+		AnchorPane page = (AnchorPane) loader.load();		
+				
+		Scene scene = new Scene(page, 297, 410);
+		Stage dialog = new Stage();
+		
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.setTitle("File Info");
+		dialog.setScene(scene);
+		dialog.setResizable(false);
+		
+		dialog.showAndWait();	
     }
 
     @FXML

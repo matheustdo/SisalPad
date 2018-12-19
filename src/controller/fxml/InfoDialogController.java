@@ -28,6 +28,16 @@ public class InfoDialogController implements Initializable {
 		idLabel.setText(ClientController.openedTextFile.getId() + "");
 		nameLabel.setText(ClientController.openedTextFile.getName());
 		ownerLabel.setText(ClientController.openedTextFile.getOwner());
+		
+		String formatedUsers = new String();
+		for(String user: ClientController.openedTextFile.getUsers()) {
+			formatedUsers += user + System.getProperty("line separator");
+		}		
+		
+		if(formatedUsers.length() != 0) {
+			usersTextArea.setText(formatedUsers);
+		}
+		
 	}
     
 }
