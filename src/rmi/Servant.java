@@ -1,10 +1,18 @@
 package rmi;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import model.TextFile;
 
@@ -14,10 +22,12 @@ public class Servant extends UnicastRemoteObject implements Service {
 
 	private Map<Integer, TextFile> textFiles;
 	
-	public Servant() throws RemoteException {
+	public Servant() throws ClassNotFoundException, IOException {
 		super();
 		this.textFiles = new HashMap<Integer, TextFile>();
-	}
+		loadData();
+		persistence();
+	}	
 
 	@Override
 	public TextFile newFile(String name, String owner) throws RemoteException {
@@ -66,6 +76,59 @@ public class Servant extends UnicastRemoteObject implements Service {
 	public void addUsers(ArrayList<String> users, int id) throws RemoteException {
 		TextFile textFile = textFiles.get(id);
 		textFile.setUsers(users);
+	}
+	
+	/**
+	 * Loads server data
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 */
+	@SuppressWarnings("unchecked")
+	private void loadData() throws IOException, ClassNotFoundException {
+		File file = new File("system.data");
+		
+		if(file.exists()) {
+			FileInputStream fis = new FileInputStream(file);	 
+			ObjectInputStream ois = new ObjectInputStream(fis);	 
+			Object obj = ois.readObject();
+			
+			if(obj instanceof Map<?, ?>) {
+				textFiles = (Map<Integer, TextFile>) obj;
+			}
+			
+			ois.close(); 
+			fis.close();
+		}
+	}
+	
+	/**
+	 * Turns on system persistence
+	 */
+	private void persistence() {
+		Timer timer = new Timer();
+		
+		timer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				File file = new File("system.data");
+				
+				try {					
+					if(!file.exists()) {					
+						file.createNewFile();					
+					}		
+					
+					FileOutputStream fos = new FileOutputStream(file);			 
+					ObjectOutputStream oos = new ObjectOutputStream(fos); 
+					oos.writeObject(textFiles); 
+					oos.flush(); 
+					oos.close(); 
+					fos.flush(); 
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}			
+		}, 2000, 2000);
 	}
 
 }
