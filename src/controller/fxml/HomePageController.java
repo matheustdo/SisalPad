@@ -80,9 +80,7 @@ public class HomePageController implements Observer, Initializable {
             @Override
             public void handle(KeyEvent event) {
             	IndexRange range = textArea.getSelection();
-            	if(event.getCode() == KeyCode.PASTE) {
-            		System.out.println("PASTE");
-            	} else if (event.getCode() == KeyCode.BACK_SPACE) {
+            	if (event.getCode() == KeyCode.BACK_SPACE) {
             		try {
 						ClientController.backspaceDelete(range);
 					} catch (RemoteException e) {
@@ -91,6 +89,12 @@ public class HomePageController implements Observer, Initializable {
             	} else if (event.getCode() == KeyCode.DELETE) {
             		try {
 						ClientController.delDelete(range);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+            	} else if (event.getCode() == KeyCode.ENTER) {
+            		try {                    	
+						ClientController.addText(range, System.getProperty("line.separator"));
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}
