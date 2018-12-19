@@ -58,7 +58,14 @@ public class TextFile implements Serializable {
 			String endString = this.text.substring(end, this.text.length());
 			this.text = startString + text + endString;
 		}
-		System.out.println(this.text);
+	}
+
+	public void removeTextAtRange(int start, int end) {
+		if(this.text != null) {
+			String startString = this.text.substring(0, start);
+			String endString = this.text.substring(end, this.text.length());
+			this.text = startString + endString;
+		}
 	}
 
 }

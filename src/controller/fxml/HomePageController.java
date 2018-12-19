@@ -79,17 +79,27 @@ public class HomePageController implements Observer, Initializable {
 		textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-            	IndexRange a = textArea.getSelection();
+            	IndexRange range = textArea.getSelection();
             	if(event.getCode() == KeyCode.PASTE) {
             		System.out.println("PASTE");
             	} else if (event.getCode() == KeyCode.BACK_SPACE) {
-
-            	} else if (event.getCode() == KeyCode.COPY) {
-            		System.out.println("COPY");
+            		try {
+						ClientController.backspaceDelete(range);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
             	} else if (event.getCode() == KeyCode.DELETE) {
-
+            		try {
+						ClientController.delDelete(range);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
             	} else {            		
-                    ClientController.openedTextFile.insertTextAtRange(a.getStart(), a.getEnd(), event.getText());
+                    try {                    	
+						ClientController.addText(range, event.getText());
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
             	}             	
             }
         });

@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import javafx.scene.control.IndexRange;
 import model.TextFile;
 import rmi.Service;
 
@@ -48,6 +49,26 @@ public class ClientController {
 	
 	public static void changeOpened(int id) throws RemoteException {
 		openedTextFile = service.getFile(id);
+	}
+	
+	public static void addText(IndexRange range, String text) throws RemoteException {
+		service.addText(range.getStart(), range.getEnd(), text, openedTextFile.getId());
+	}
+	
+	public static void backspaceDelete(IndexRange range) throws RemoteException {
+		if(range.getStart() > 0 && range.getStart() - range.getEnd() == 0) {
+			service.deleteText(range.getStart() - 1, range.getEnd(), openedTextFile.getId());
+		} else {
+			service.deleteText(range.getStart(), range.getEnd(), openedTextFile.getId());
+		}
+	}
+	
+	public static void delDelete(IndexRange range) throws RemoteException {
+		if(range.getEnd() + 1 <= openedTextFile.getText().length() && range.getStart() - range.getEnd() == 0) {
+			service.deleteText(range.getStart(), range.getEnd() + 1, openedTextFile.getId());
+		} else {
+			service.deleteText(range.getStart(), range.getEnd(), openedTextFile.getId());
+		}
 	}
 	
 }

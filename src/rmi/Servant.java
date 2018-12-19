@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javafx.scene.control.IndexRange;
 import model.TextFile;
 
 public class Servant extends UnicastRemoteObject implements Service {
@@ -52,11 +51,15 @@ public class Servant extends UnicastRemoteObject implements Service {
 	}
 
 	@Override
-	public String addChar(IndexRange range, String text, int id) throws RemoteException {
+	public void addText(int start, int end,  String text, int id) throws RemoteException {
 		TextFile textFile = textFiles.get(id);
-		int start = range.getStart();
-		int end = range.getEnd();
-		return text;
+		textFile.insertTextAtRange(start, end, text);
+	}
+
+	@Override
+	public void deleteText(int start, int end, int id) throws RemoteException {
+		TextFile textFile = textFiles.get(id);
+		textFile.removeTextAtRange(start, end);
 	}
 
 }
