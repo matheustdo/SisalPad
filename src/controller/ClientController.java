@@ -5,6 +5,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 
 import javafx.scene.control.IndexRange;
 import model.TextFile;
@@ -69,6 +70,10 @@ public class ClientController {
 		} else {
 			service.deleteText(range.getStart(), range.getEnd(), openedTextFile.getId());
 		}
+	}
+	
+	public static void addUser(ArrayList<String> users) throws RemoteException {
+		service.addUsers(users, openedTextFile.getId());
 	}
 	
 }

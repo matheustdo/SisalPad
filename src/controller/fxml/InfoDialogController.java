@@ -32,13 +32,12 @@ public class InfoDialogController implements Initializable {
 		
 		String formatedUsers = new String();
 		for(String user: ClientController.openedTextFile.getUsers()) {
-			formatedUsers += user + System.getProperty("line separator");
+			formatedUsers += user + System.getProperty("line.separator");
 		}		
 		
 		if(formatedUsers.length() != 0) {
 			usersTextArea.setText(formatedUsers);
-		}
-		
+		}		
 	}
     
 }

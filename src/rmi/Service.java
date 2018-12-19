@@ -58,4 +58,12 @@ public interface Service extends Remote {
 	 * @throws RemoteException
 	 */
 	public void deleteText(int start, int end, int id) throws RemoteException;
+	
+	/**
+	 * Add users to file
+	 * @param users User list
+	 * @param id Text id
+	 * @throws RemoteException
+	 */
+	public void addUsers(ArrayList<String> users, int id) throws RemoteException;
 }

@@ -62,4 +62,10 @@ public class Servant extends UnicastRemoteObject implements Service {
 		textFile.removeTextAtRange(start, end);
 	}
 
+	@Override
+	public void addUsers(ArrayList<String> users, int id) throws RemoteException {
+		TextFile textFile = textFiles.get(id);
+		textFile.setUsers(users);
+	}
+
 }

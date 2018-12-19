@@ -17,19 +17,14 @@ public class NewTextDialogController extends Observable {
 
     @FXML
     private Button createButton;
-    
-    private Stage dialog;
 
     @FXML
     void createOnAction(ActionEvent event) throws RemoteException {
     	ClientController.newFile(fileNameTextField.getText());
     	setChanged();
 		notifyObservers();
-    	dialog.close();
-    }
-    
-    public void setDialog(Stage dialog) {
-    	this.dialog = dialog;
+		Stage dialog = (Stage) createButton.getScene().getWindow();
+		dialog.close();
     }
     
 }

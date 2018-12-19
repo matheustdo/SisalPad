@@ -131,17 +131,17 @@ public class HomePageController implements Observer, Initializable {
         loader.setLocation(Client.class.getResource("fxml/NewTextDialog.fxml"));
 		AnchorPane page = (AnchorPane) loader.load();		
 				
-		Scene scene = new Scene(page, 200, 100);
+		Scene scene = new Scene(page, 200, 120);
 		Stage dialog = new Stage();
 		
 		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.setTitle("New text file");
+		dialog.initOwner(anchorPane.getScene().getWindow());
+		dialog.setTitle("New Text File");
 		dialog.setScene(scene);
 		dialog.setResizable(false);
 		
 		NewTextDialogController newTextDialog = loader.getController();
 		newTextDialog.addObserver(this);
-		newTextDialog.setDialog(dialog);
 		
 		dialog.showAndWait();		
     }
@@ -156,6 +156,7 @@ public class HomePageController implements Observer, Initializable {
 		Stage dialog = new Stage();
 		
 		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.initOwner(anchorPane.getScene().getWindow());
 		dialog.setTitle("File Info");
 		dialog.setScene(scene);
 		dialog.setResizable(false);
@@ -164,8 +165,21 @@ public class HomePageController implements Observer, Initializable {
     }
 
     @FXML
-    void colaboratorsMenuOnAction(ActionEvent event) {
-
+    void colaboratorsMenuOnAction(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Client.class.getResource("fxml/ColaboratorsDialog.fxml"));
+		AnchorPane page = (AnchorPane) loader.load();		
+				
+		Scene scene = new Scene(page, 296, 323);
+		Stage dialog = new Stage();
+		
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.initOwner(anchorPane.getScene().getWindow());
+		dialog.setTitle("Colaborators");
+		dialog.setScene(scene);		
+		dialog.setResizable(false);
+		
+		dialog.showAndWait();	
     }
 
     @FXML
@@ -221,7 +235,6 @@ public class HomePageController implements Observer, Initializable {
 		System.out.println(event.getCharacter());
 		ClientController.openedTextFile.insertTextAtRange(i.getStart(), i.getStart(), "c");
     }
-
 	
 	private void loadFile() {		
 		if(ClientController.openedTextFile != null) {
