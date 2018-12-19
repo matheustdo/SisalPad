@@ -27,6 +27,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.TextFile;
 import view.Client;
 
 public class HomePageController implements Observer, Initializable {
@@ -57,7 +58,7 @@ public class HomePageController implements Observer, Initializable {
 		tabPane.setTabMinWidth(70);
 		tabPane.setTabMaxWidth(70);		
 		
-		loadFile();
+		openFile();
 		
 		textArea = new TextArea() {
 			@Override
@@ -118,6 +119,12 @@ public class HomePageController implements Observer, Initializable {
             	}             	
             }
         });
+		
+		try {
+			loadFiles();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
     
     @FXML
@@ -200,7 +207,7 @@ public class HomePageController implements Observer, Initializable {
     	}
     	
     	ClientController.removeFile(id);
-    	loadFile();
+    	openFile();
     }
     
     @FXML
@@ -213,7 +220,7 @@ public class HomePageController implements Observer, Initializable {
     	if(!tabPane.getSelectionModel().isEmpty()) {
     		textArea.setText(ClientController.openedTextFile.getText());
         	ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
-        	loadFile();
+        	openFile();
     	}    	
     }    
 
@@ -225,7 +232,7 @@ public class HomePageController implements Observer, Initializable {
 			tab.setId(ClientController.openedTextFile.getId() + "");
 			tabPane.getTabs().add(tab);
 			tabPane.getSelectionModel().select(tab);
-			loadFile();
+			openFile();
 		}
 	}
 	
@@ -236,12 +243,26 @@ public class HomePageController implements Observer, Initializable {
 		ClientController.openedTextFile.insertTextAtRange(i.getStart(), i.getStart(), "c");
     }
 	
-	private void loadFile() {		
+	private void loadFiles() throws RemoteException {
+		for(TextFile textFile: ClientController.getUserFiles()) {
+			Tab tab = new Tab("(" + textFile.getId() + ") " + textFile.getName());
+			tab.setId(textFile.getId() + "");
+			tabPane.getTabs().add(tab);
+		}
+		
+		if(!tabPane.getTabs().isEmpty()) {
+			tabPane.getSelectionModel().select(0);
+			ClientController.changeOpened(Integer.parseInt(tabPane.getTabs().get(0).getId()));
+			openFile();
+		}
+	}
+	
+	private void openFile() {		
 		if(ClientController.openedTextFile != null) {
 			infoMenuItem.setDisable(false);
 			textArea.setVisible(true);
 			textArea.setText(ClientController.openedTextFile.getText());
-			if(ClientController.openedTextFile.getOwner().equals(ClientController.user)) {
+			if(ClientController.openedTextFile.getOwner().equals(ClientController.getUser())) {
 				setOwner();
 			} else {
 				removeOwner();

@@ -66,4 +66,5 @@ public interface Service extends Remote {
 	 * @throws RemoteException
 	 */
 	public void addUsers(ArrayList<String> users, int id) throws RemoteException;
+
 }

@@ -18,7 +18,7 @@ public class ClientController {
 	 */
 	private static ClientController instance;
 	private static Service service;
-	public static String user;	
+	private static String user;	
 	
 	/*
 	 * Variables for opened text file management
@@ -32,6 +32,14 @@ public class ClientController {
 			instance = new ClientController();
 		}
 		return instance;
+	}
+	
+	public static String getUser() {
+		return user;
+	}
+
+	public static void setUser(String user) {
+		ClientController.user = user;
 	}
 	
 	public static void setUpService(String serverIP, int serverPort, String userID) throws IOException, NotBoundException {
@@ -75,5 +83,9 @@ public class ClientController {
 	public static void addUser(ArrayList<String> users) throws RemoteException {
 		service.addUsers(users, openedTextFile.getId());
 	}
+	
+	public static ArrayList<TextFile> getUserFiles() throws RemoteException {
+		return service.getUserFiles(user);
+	}	
 	
 }
