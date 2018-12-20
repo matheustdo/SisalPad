@@ -7,3 +7,4 @@ Releases at: https://github.com/matheustdo/SisalPad/releases
 * The server port is fixed as 1050.
 #### Known bugs:
 * Upwards text selection.
+* Tab selection by list is modifying mouse selection.
