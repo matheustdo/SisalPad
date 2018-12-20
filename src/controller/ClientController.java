@@ -19,6 +19,8 @@ public class ClientController {
 	private static ClientController instance;
 	private static Service service;
 	private static String user;	
+	private static String address;
+	private static int port;
 	
 	/*
 	 * Variables for opened text file management
@@ -42,9 +44,19 @@ public class ClientController {
 		ClientController.user = user;
 	}
 	
+	public static String getAddress() {
+		return address;
+	}
+
+	public static int getPort() {
+		return port;
+	}
+
 	public static void setUpService(String serverIP, int serverPort, String userID) throws IOException, NotBoundException {
 		Registry registry = LocateRegistry.getRegistry(serverIP, serverPort);		
 		service = (Service) registry.lookup("TextEditor");
+		address = serverIP;
+		port = serverPort;
 		user = userID;
 	}	
 

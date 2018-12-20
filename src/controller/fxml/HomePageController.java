@@ -281,6 +281,24 @@ public class HomePageController implements Observer, Initializable {
     }
     
     @FXML
+    void aboutMenuOnAction(ActionEvent event) throws IOException {
+    	FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Client.class.getResource("fxml/AboutDialog.fxml"));
+		AnchorPane page = (AnchorPane) loader.load();		
+				
+		Scene scene = new Scene(page, 422, 245);
+		Stage dialog = new Stage();
+		
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.initOwner(anchorPane.getScene().getWindow());
+		dialog.setTitle("About SisalPad");
+		dialog.setScene(scene);
+		dialog.setResizable(false);
+		
+		dialog.showAndWait();	
+    }
+    
+    @FXML
     void tabPaneOnAction(MouseEvent event) throws NumberFormatException, RemoteException {	
     	if(!tabPane.getSelectionModel().isEmpty()) {    		
     		textArea.setText(ClientController.openedTextFile.getText());
