@@ -61,7 +61,7 @@ public class HomePageController implements Observer, Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		tabPane.setTabMinWidth(70);
 		tabPane.setTabMaxWidth(70);		
-		tabPane.setStyle("-fx-open-tab-animation: NONE; -fx-close-tab-animation: NONE;");
+		tabPane.setStyle("-fx-open-tab-animation: NONE; -fx-close-tab-animation: NONE;");		
 		
 		openFile();
 		
@@ -146,6 +146,14 @@ public class HomePageController implements Observer, Initializable {
 		
 		openedFileUpdater();
 		userFilesUpdater();
+		
+		if(!System.getProperty("os.name").contains("Linux")) {
+			try {
+				showSystemWarning();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
     
     @FXML
@@ -403,6 +411,41 @@ public class HomePageController implements Observer, Initializable {
 			}
 				
 		}, 200, 200);
+	}
+	
+	/**
+	 * Shows system warning
+	 * @throws IOException
+	 */
+	private void showSystemWarning() throws IOException {
+		Timer timer = new Timer();
+		
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				Platform.runLater(() -> {
+					FXMLLoader loader = new FXMLLoader();
+			        loader.setLocation(Client.class.getResource("fxml/AlertDialog.fxml"));
+					AnchorPane page = new AnchorPane();
+					try {
+						page = (AnchorPane) loader.load();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}		
+							
+					Scene scene = new Scene(page, 288, 159);
+					Stage dialog = new Stage();
+	
+					dialog.initModality(Modality.WINDOW_MODAL);
+					dialog.initOwner(anchorPane.getScene().getWindow());		
+					dialog.setTitle("System Warning");
+					dialog.setScene(scene);
+					dialog.setResizable(false);
+					
+					dialog.show();
+				});
+			}			
+		}, 1000);		
 	}
     
 }
