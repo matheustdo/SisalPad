@@ -331,10 +331,10 @@ public class HomePageController implements Observer, Initializable {
 			public void run() {				
 				try {
 					if(ClientController.openedTextFile != null) {
+						ClientController.changeOpened(ClientController.openedTextFile.getId());
 						IndexRange range = textArea.getSelection();
 						Double scrollTopValue = textArea.scrollTopProperty().get();
-						Double scrollLeftValue = textArea.scrollLeftProperty().get();
-						ClientController.changeOpened(ClientController.openedTextFile.getId());
+						Double scrollLeftValue = textArea.scrollLeftProperty().get();						
 						if(ClientController.openedTextFile != null) {
 							textArea.setText(ClientController.openedTextFile.getText());		
 							textArea.selectRange(range.getStart(), range.getEnd());
