@@ -10,6 +10,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+/**
+ * @author Matheus Teles
+ */
 public class NewTextDialogController extends Observable {
 	
 	@FXML

@@ -11,6 +11,9 @@ import javafx.scene.control.IndexRange;
 import model.TextFile;
 import rmi.Service;
 
+/**
+ * @author Matheus Teles
+ */
 public class ClientController {
 	
 	/*

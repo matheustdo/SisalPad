@@ -34,6 +34,9 @@ import javafx.stage.Stage;
 import model.TextFile;
 import view.Client;
 
+/**
+ * @author Matheus Teles
+ */
 public class HomePageController implements Observer, Initializable {
 	
 	@FXML
@@ -67,6 +70,9 @@ public class HomePageController implements Observer, Initializable {
 		
 		openFile();
 		
+		/*
+		 * Enables paste text
+		 */
 		textArea = new TextArea() {
 			@Override
             public void paste() {
@@ -90,7 +96,9 @@ public class HomePageController implements Observer, Initializable {
 		AnchorPane.setBottomAnchor(textArea, 0.0);
 		AnchorPane.setTopAnchor(textArea, 56.0);
 
-		// Controls input
+		/*
+		 * Controls input
+		 */
 		textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -128,7 +136,9 @@ public class HomePageController implements Observer, Initializable {
             }
         });
 		
-		// Solves accentuation input
+		/*
+		 * Solves accentuation input
+		 */
 		textArea.setOnInputMethodTextChanged(new EventHandler<InputMethodEvent>() {
 			@Override
 			public void handle(InputMethodEvent event) {
@@ -150,6 +160,9 @@ public class HomePageController implements Observer, Initializable {
 		openedFileUpdater();
 		userFilesUpdater();
 		
+		/*
+		 * Show alert to non Linux users
+		 */
 		if(!System.getProperty("os.name").contains("Linux")) {
 			try {
 				showSystemWarning();
@@ -164,6 +177,11 @@ public class HomePageController implements Observer, Initializable {
     	textArea.setWrapText(checkWrapMenuItem.isSelected());
     }
     
+    /**
+     * Opens new file dialog
+     * @param event
+     * @throws IOException
+     */
     @FXML
     void newMenuOnAction(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader();
@@ -185,8 +203,13 @@ public class HomePageController implements Observer, Initializable {
 		dialog.showAndWait();		
     }
     
+    /**
+     * Opens info dialog
+     * @param event
+     * @throws IOException
+     */
     @FXML
-    void infoMenuOnAction(ActionEvent event) throws IOException {
+    void infoMenuOnAction(ActionEvent event) throws IOException {    	
     	FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Client.class.getResource("fxml/InfoDialog.fxml"));
 		AnchorPane page = (AnchorPane) loader.load();		
@@ -203,6 +226,11 @@ public class HomePageController implements Observer, Initializable {
 		dialog.showAndWait();	
     }
 
+    /**
+     * Opens collaborators dialog
+     * @param event
+     * @throws IOException
+     */
     @FXML
     void collaboratorsMenuOnAction(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader();
@@ -221,6 +249,11 @@ public class HomePageController implements Observer, Initializable {
 		dialog.showAndWait();	
     }
 
+    /**
+     * Deletes opened file
+     * @param event
+     * @throws RemoteException
+     */
     @FXML
     void deleteMenuOnAction(ActionEvent event) throws RemoteException {
     	int id = ClientController.openedTextFile.getId();
@@ -242,11 +275,20 @@ public class HomePageController implements Observer, Initializable {
     	openFile();
     }
     
+    /**
+     * Closes system
+     * @param event
+     */
     @FXML
     void closeMenuOnAction(ActionEvent event) {
     	System.exit(0);
     }
     
+    /**
+     * Opens about dialog
+     * @param event
+     * @throws IOException
+     */
     @FXML
     void aboutMenuOnAction(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader();
@@ -265,6 +307,12 @@ public class HomePageController implements Observer, Initializable {
 		dialog.showAndWait();	
     }
     
+    /**
+     * Changes file when tabPane action pane
+     * @param event
+     * @throws NumberFormatException
+     * @throws RemoteException
+     */
     @FXML
     void tabPaneOnAction(MouseEvent event) throws NumberFormatException, RemoteException {	
     	if(!tabPane.getSelectionModel().isEmpty()) {    		
@@ -272,11 +320,14 @@ public class HomePageController implements Observer, Initializable {
         	ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
         	openFile();
     	}    	
-    }    
-
+    } 
+    
 	@Override
 	public void update(Observable o, Object arg) {
-		if(o instanceof NewTextDialogController) {			
+		if(o instanceof NewTextDialogController) {	
+			/*
+			 * Add tab when a new file was created
+			 */
 			textArea.setText(ClientController.openedTextFile.getText());
 			Tab tab = new Tab("(" + ClientController.openedTextFile.getId() + ") " + ClientController.openedTextFile.getName());
 			tab.setId(ClientController.openedTextFile.getId() + "");
@@ -286,6 +337,10 @@ public class HomePageController implements Observer, Initializable {
 		}
 	}
 	
+	/**
+	 * Loads user files on home
+	 * @throws RemoteException
+	 */
 	private void loadFiles() throws RemoteException {
 		for(TextFile textFile: ClientController.getUserFiles()) {
 			Tab tab = new Tab("(" + textFile.getId() + ") " + textFile.getName());
@@ -300,6 +355,9 @@ public class HomePageController implements Observer, Initializable {
 		}
 	}
 	
+	/**
+	 * Opens a file and change menu buttons states
+	 */
 	private void openFile() {		
 		if(ClientController.openedTextFile != null) {
 			infoMenuItem.setDisable(false);
@@ -316,16 +374,25 @@ public class HomePageController implements Observer, Initializable {
 		}
 	}
 	
+	/**
+	 * Sets menu buttons states to owner access
+	 */
 	private void setOwner() {
 		deleteMenuItem.setDisable(false);
 		collaboratorsMenuItem.setDisable(false);
 	}
 	
+	/**
+	 * Sets menu buttons states to normal user access
+	 */
 	private void removeOwner() {
 		deleteMenuItem.setDisable(true);
 		collaboratorsMenuItem.setDisable(true);
 	}
 	
+	/**
+	 * Update opened file per time
+	 */
 	private void openedFileUpdater() {
 		Timer timer = new Timer();
 		
@@ -333,7 +400,7 @@ public class HomePageController implements Observer, Initializable {
 			@Override
 			public void run() {				
 				try {
-					if(ClientController.openedTextFile != null) {						
+					if(ClientController.openedTextFile != null) {	
 						String oldText = ClientController.openedTextFile.getText();							
 						ClientController.changeOpened(ClientController.openedTextFile.getId());
 						String newText = ClientController.openedTextFile.getText();
@@ -344,6 +411,9 @@ public class HomePageController implements Observer, Initializable {
 						Double scrollTopValue = textArea.scrollTopProperty().get();
 						Double scrollLeftValue = textArea.scrollLeftProperty().get();						
 						
+						/*
+						 * Moves the cursor or selection for non user text change
+						 */
 						if(!alt) {
 							if(start <= oldText.length() && start <= newText.length() &&
 							   !oldText.substring(0, start).equals(newText.substring(0, start))) {
@@ -362,6 +432,9 @@ public class HomePageController implements Observer, Initializable {
 						}
 						alt = false;						
 						
+						/*
+						 * Updates textArea selection, caret position and scroll
+						 */
 						if(ClientController.openedTextFile != null) {
 							textArea.setText(ClientController.openedTextFile.getText());
 							
@@ -384,6 +457,9 @@ public class HomePageController implements Observer, Initializable {
 		}, 200, 200);		
 	}
 	
+	/**
+	 * Update user files per time
+	 */
 	private void userFilesUpdater() {
 		Timer timer = new Timer();
 		
@@ -392,12 +468,18 @@ public class HomePageController implements Observer, Initializable {
 			public void run() {
 				Platform.runLater(() -> {
 					if(ClientController.openedTextFile != null) {
+						/*
+						 * Update if the user has loaded files
+						 */
 						try {
 							String selected = tabPane.getSelectionModel().getSelectedItem().getId();
 							
 							TabPane tabPaneAux = tabPane;
 							tabPaneAux.getTabs().clear();
 							
+							/*
+							 * Creates a temporary tabPane to change main tabPane
+							 */
 							for(TextFile textFile: ClientController.getUserFiles()) {
 								Tab tab = new Tab("(" + textFile.getId() + ") " + textFile.getName());
 								tab.setId(textFile.getId() + "");
@@ -406,6 +488,9 @@ public class HomePageController implements Observer, Initializable {
 
 							tabPane = tabPaneAux;
 							
+							/*
+							 * Selects active tab
+							 */
 							for(Tab tab: tabPane.getTabs()) {
 								if(tab.getId().equals(selected)) {
 									tabPane.getSelectionModel().select(tab);
@@ -415,12 +500,18 @@ public class HomePageController implements Observer, Initializable {
 						} catch (RemoteException e) {
 							e.printStackTrace();
 						}					
-					} else {						
+					} else {	
+						/*
+						 * Update if the user does not have loaded files
+						 */
 						try {
 							textArea.setText("");
 							TabPane tabPaneAux = tabPane;
 							tabPaneAux.getTabs().clear();
 							
+							/*
+							 * Creates a temporary tabPane to change main tabPane
+							 */
 							for(TextFile textFile: ClientController.getUserFiles()) {
 								Tab tab = new Tab("(" + textFile.getId() + ") " + textFile.getName());
 								tab.setId(textFile.getId() + "");
@@ -429,10 +520,13 @@ public class HomePageController implements Observer, Initializable {
 							
 							tabPane = tabPaneAux;
 							
+							/*
+							 * Selects first tab if it exists
+							 */
 							if(!tabPane.getTabs().isEmpty() && ClientController.openedTextFile == null) {
-								ClientController.changeOpened(Integer.parseInt(tabPane.getSelectionModel().getSelectedItem().getId()));
-							}
-							
+								ClientController.changeOpened(Integer.parseInt(
+										tabPane.getSelectionModel().getSelectedItem().getId()));
+							}							
 						} catch (RemoteException e) {
 							e.printStackTrace();
 						}					
@@ -446,7 +540,7 @@ public class HomePageController implements Observer, Initializable {
 	}
 	
 	/**
-	 * Shows system warning
+	 * Shows system warning dialog
 	 * @throws IOException
 	 */
 	private void showSystemWarning() throws IOException {

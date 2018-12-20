@@ -16,6 +16,9 @@ import java.util.TimerTask;
 
 import model.TextFile;
 
+/**
+ * @author Matheus Teles
+ */
 public class Servant extends UnicastRemoteObject implements Service {
 	
 	private static final long serialVersionUID = -3011273052818005271L;

@@ -5,7 +5,9 @@ import java.util.Scanner;
 
 import rmi.Servant;
 
-
+/**
+ * @author Matheus Teles
+ */
 public class Server {
 	public static int port;
 

@@ -9,6 +9,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
+/**
+ * @author Matheus Teles
+ */
 public class InfoDialogController implements Initializable {
 	
 	@FXML

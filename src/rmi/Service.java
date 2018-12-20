@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 import model.TextFile;
 
+/**
+ * @author Matheus Teles
+ */
 public interface Service extends Remote {
 
 	/**

@@ -8,6 +8,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 
+/**
+ * @author Matheus Teles
+ */
 public class AboutDialogController implements Initializable {
 
 	@FXML

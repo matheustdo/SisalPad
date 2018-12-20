@@ -3,6 +3,9 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * @author Matheus Teles
+ */
 public class TextFile implements Serializable {
 	
 	private static final long serialVersionUID = 5275929308261089338L;
@@ -50,6 +53,12 @@ public class TextFile implements Serializable {
 		return owner;
 	}
 	
+	/**
+	 * Insert text at range
+	 * @param start Initial range
+	 * @param end Final range
+	 * @param text Text to be inserted
+	 */
 	public void insertTextAtRange(int start, int end, String text) {
 		if(this.text == null) {
 			this.text = text;
@@ -60,6 +69,11 @@ public class TextFile implements Serializable {
 		}
 	}
 
+	/**
+	 * Removes text at range
+	 * @param start Initial range
+	 * @param end End range
+	 */
 	public void removeTextAtRange(int start, int end) {
 		if(this.text != null && start <= this.text.length() && end <= this.text.length()) {
 			String startString = this.text.substring(0, start);

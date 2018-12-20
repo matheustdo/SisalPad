@@ -14,6 +14,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
+/**
+ * @author Matheus Teles
+ */
 public class CollaboratorsDialogController extends Observable implements Initializable {
 
 	@FXML

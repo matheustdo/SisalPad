@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+/**
+ * @author Matheus Teles
+ */
 public class AlertDialogController {
 	@FXML
     private Label warningTextLabel;

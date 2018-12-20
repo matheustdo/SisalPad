@@ -12,6 +12,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * @author Matheus Teles
+ */
 public class Client extends Application {
 	
 	public static void main(String[] args) {
