@@ -4,7 +4,11 @@ This is a text editor that works with RMI made by Matheus Teles for Competition 
 Releases at: https://github.com/matheustdo/SisalPad/releases
 
 #### Important:
-* The server port is fixed as 1050.
+* You can enter the server port starting the server jar and inserting the port when it is requested.
+* You can also enter the server port passing it as an argument like that example:
+    ```
+    $ java -jar SisalPad-Server.jar <port-number>
+    ```
 #### Known bugs:
 * Upwards text selection.
 * Tab selection by list is modifying mouse selection.
