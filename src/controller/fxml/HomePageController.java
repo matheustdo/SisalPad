@@ -87,100 +87,56 @@ public class HomePageController implements Observer, Initializable {
 		AnchorPane.setRightAnchor(textArea, 0.0);
 		AnchorPane.setBottomAnchor(textArea, 0.0);
 		AnchorPane.setTopAnchor(textArea, 56.0);
-		
-		if(System.getProperty("os.name").contains("Linux")) {
-			// Controls input
-			textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
-	            @Override
-	            public void handle(KeyEvent event) {
-	            	IndexRange range = textArea.getSelection();
-	            	if (event.getCode() == KeyCode.BACK_SPACE) {
-	            		try {
-							ClientController.backspaceDelete(range);
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}
-	            	} else if (event.getCode() == KeyCode.DELETE) {
-	            		try {
-							ClientController.delDelete(range);
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}
-	            	} else if (event.getCode() == KeyCode.ENTER) {
-	            		try {                    	
-							ClientController.addText(range, System.getProperty("line.separator"));
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}
-	            	} else if (!event.getCode().isArrowKey() && 
-		            		   !event.getCode().isFunctionKey() &&
-		            		   !event.getCode().isMediaKey() &&
-		            		   !event.getCode().isNavigationKey() &&
-		            		   !event.isControlDown()) {            		
-	                    try {
-							ClientController.addText(range, event.getText());						
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}
-	            	}             	
-	            }
-	        });
-			
-			// Solves accentuation input
-			textArea.setOnInputMethodTextChanged(new EventHandler<InputMethodEvent>() {
-				@Override
-				public void handle(InputMethodEvent event) {
-					try {
-						ClientController.addText(textArea.getSelection(), event.getCommitted());
+
+		// Controls input
+		textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+            	IndexRange range = textArea.getSelection();
+            	if (event.getCode() == KeyCode.BACK_SPACE) {
+            		try {
+						ClientController.backspaceDelete(range);
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}
-					textArea.insertText(textArea.getCaretPosition(), event.getCommitted());
-				}
-			});
-		}		
+            	} else if (event.getCode() == KeyCode.DELETE) {
+            		try {
+						ClientController.delDelete(range);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+            	} else if (event.getCode() == KeyCode.ENTER) {
+            		try {                    	
+						ClientController.addText(range, System.getProperty("line.separator"));
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+            	} else if (!event.getCode().isArrowKey() && 
+	            		   !event.getCode().isFunctionKey() &&
+	            		   !event.getCode().isMediaKey() &&
+	            		   !event.getCode().isNavigationKey() &&
+	            		   !event.isControlDown()) {            		
+                    try {
+						ClientController.addText(range, event.getText());						
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+            	}             	
+            }
+        });
 		
-		if(System.getProperty("os.name").contains("Windows")) {
-			textArea.setOnKeyTyped(new EventHandler<KeyEvent>() {				
-	            @Override
-	            public void handle(KeyEvent event) {
-	            	IndexRange range = textArea.getSelection();
-	            	if(!event.getCharacter().isEmpty()) {
-	            		try {
-							ClientController.addText(range, event.getCharacter());
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}	
-	            	}	            	
-	            }
-	        });
-			
-			textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
-	            @Override
-	            public void handle(KeyEvent event) {
-	            	IndexRange range = textArea.getSelection();
-	            	if (event.getCode() == KeyCode.BACK_SPACE) {
-	            		try {
-							ClientController.backspaceDelete(range);
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}
-	            	} else if (event.getCode() == KeyCode.DELETE) {
-	            		try {
-							ClientController.delDelete(range);
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}
-	            	} else if (event.getCode() == KeyCode.ENTER) {
-	            		try {
-							ClientController.addText(range, "\n");
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}
-	            	}
-	            }
-	        });
-		}
+		// Solves accentuation input
+		textArea.setOnInputMethodTextChanged(new EventHandler<InputMethodEvent>() {
+			@Override
+			public void handle(InputMethodEvent event) {
+				try {
+					ClientController.addText(textArea.getSelection(), event.getCommitted());
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+				textArea.insertText(textArea.getCaretPosition(), event.getCommitted());
+			}
+		});
 		
 		try {
 			loadFiles();
@@ -364,29 +320,24 @@ public class HomePageController implements Observer, Initializable {
 		
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
-			public void run() {
-				IndexRange range = textArea.getSelection();
-				Double scrollTopValue = textArea.scrollTopProperty().get();
-				Double scrollLeftValue = textArea.scrollLeftProperty().get();
-				
+			public void run() {				
 				try {
-					Tab tab = tabPane.getSelectionModel().getSelectedItem();
-					
-					if(tab != null) {
-						ClientController.changeOpened(Integer.parseInt(tab.getId()));
-					} else {
-						ClientController.openedTextFile = null;
-					}
-				} catch (RemoteException e1) {
-					e1.printStackTrace();
-				}
-				
-				if(ClientController.openedTextFile != null) {
-					textArea.setText(ClientController.openedTextFile.getText());		
-					textArea.selectRange(range.getStart(), range.getEnd());
-					textArea.setScrollTop(scrollTopValue);
-					textArea.setScrollLeft(scrollLeftValue);
-				}
+					if(ClientController.openedTextFile != null) {
+						IndexRange range = textArea.getSelection();
+						Double scrollTopValue = textArea.scrollTopProperty().get();
+						Double scrollLeftValue = textArea.scrollLeftProperty().get();
+						ClientController.changeOpened(ClientController.openedTextFile.getId());
+						if(ClientController.openedTextFile != null) {
+							textArea.setText(ClientController.openedTextFile.getText());		
+							textArea.selectRange(range.getStart(), range.getEnd());
+							textArea.setScrollTop(scrollTopValue);
+							textArea.setScrollLeft(scrollLeftValue);
+						}
+						openFile();	
+					}										
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}	
 				
 				openFile();
 			}
