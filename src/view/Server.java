@@ -20,9 +20,7 @@ public class Server {
 		}		
 		
 		Registry registry = LocateRegistry.createRegistry(port);
-		registry.bind("TextEditor", new Servant());
-		
-		
+		registry.bind("TextEditor", new Servant());		
 		
 		System.out.println("> TextEditor service is running at " + port + " port");
 	}

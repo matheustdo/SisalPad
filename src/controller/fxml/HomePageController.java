@@ -43,7 +43,7 @@ public class HomePageController implements Observer, Initializable {
     private MenuItem infoMenuItem;
 
     @FXML
-    private MenuItem colaboratorsMenuItem;
+    private MenuItem collaboratorsMenuItem;
 
     @FXML
     private MenuItem deleteMenuItem;
@@ -56,6 +56,8 @@ public class HomePageController implements Observer, Initializable {
     
     @FXML
     private CheckMenuItem checkWrapMenuItem;
+    
+    private boolean alt = false;
     
     @Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -93,6 +95,7 @@ public class HomePageController implements Observer, Initializable {
             @Override
             public void handle(KeyEvent event) {
             	IndexRange range = textArea.getSelection();
+            	alt = true;
             	if (event.getCode() == KeyCode.BACK_SPACE) {
             		try {
 						ClientController.backspaceDelete(range);
@@ -201,9 +204,9 @@ public class HomePageController implements Observer, Initializable {
     }
 
     @FXML
-    void colaboratorsMenuOnAction(ActionEvent event) throws IOException {
+    void collaboratorsMenuOnAction(ActionEvent event) throws IOException {
     	FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Client.class.getResource("fxml/ColaboratorsDialog.fxml"));
+        loader.setLocation(Client.class.getResource("fxml/CollaboratorsDialog.fxml"));
 		AnchorPane page = (AnchorPane) loader.load();		
 				
 		Scene scene = new Scene(page, 296, 323);
@@ -211,7 +214,7 @@ public class HomePageController implements Observer, Initializable {
 		
 		dialog.initModality(Modality.WINDOW_MODAL);
 		dialog.initOwner(anchorPane.getScene().getWindow());
-		dialog.setTitle("Colaborators");
+		dialog.setTitle("Collaborators");
 		dialog.setScene(scene);		
 		dialog.setResizable(false);
 		
@@ -315,12 +318,12 @@ public class HomePageController implements Observer, Initializable {
 	
 	private void setOwner() {
 		deleteMenuItem.setDisable(false);
-		colaboratorsMenuItem.setDisable(false);
+		collaboratorsMenuItem.setDisable(false);
 	}
 	
 	private void removeOwner() {
 		deleteMenuItem.setDisable(true);
-		colaboratorsMenuItem.setDisable(true);
+		collaboratorsMenuItem.setDisable(true);
 	}
 	
 	private void openedFileUpdater() {
@@ -330,14 +333,43 @@ public class HomePageController implements Observer, Initializable {
 			@Override
 			public void run() {				
 				try {
-					if(ClientController.openedTextFile != null) {
+					if(ClientController.openedTextFile != null) {						
+						String oldText = ClientController.openedTextFile.getText();							
 						ClientController.changeOpened(ClientController.openedTextFile.getId());
+						String newText = ClientController.openedTextFile.getText();
+						
 						IndexRange range = textArea.getSelection();
+						int start = range.getStart();
+						int end = range.getEnd();
 						Double scrollTopValue = textArea.scrollTopProperty().get();
 						Double scrollLeftValue = textArea.scrollLeftProperty().get();						
+						
+						if(!alt) {
+							if(start <= oldText.length() && start <= newText.length() &&
+							   !oldText.substring(0, start).equals(newText.substring(0, start))) {
+								if(oldText.length() < newText.length()) {
+									for(int i = 0; i < newText.length() - oldText.length(); i++) {
+										start++;
+										end++;
+									}								
+								} else if (oldText.length() > newText.length()) {
+									for(int i = 0; i < oldText.length() - newText.length(); i++) {
+										start--;
+										end--;
+									}	
+								}							
+							}							
+						}
+						alt = false;						
+						
 						if(ClientController.openedTextFile != null) {
-							textArea.setText(ClientController.openedTextFile.getText());		
-							textArea.selectRange(range.getStart(), range.getEnd());
+							textArea.setText(ClientController.openedTextFile.getText());
+							
+							if(start <= newText.length() && end <= newText.length() &&
+							   start >= 0 && end >= 0) {
+								textArea.selectRange(start, end);
+							}
+							
 							textArea.setScrollTop(scrollTopValue);
 							textArea.setScrollLeft(scrollLeftValue);
 						}

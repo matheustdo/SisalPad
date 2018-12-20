@@ -53,7 +53,7 @@ public class TextFile implements Serializable {
 	public void insertTextAtRange(int start, int end, String text) {
 		if(this.text == null) {
 			this.text = text;
-		} else {
+		} else if (start <= this.text.length() && end <= this.text.length()) {
 			String startString = this.text.substring(0, start);
 			String endString = this.text.substring(end, this.text.length());
 			this.text = startString + text + endString;
@@ -61,7 +61,7 @@ public class TextFile implements Serializable {
 	}
 
 	public void removeTextAtRange(int start, int end) {
-		if(this.text != null) {
+		if(this.text != null && start <= this.text.length() && end <= this.text.length()) {
 			String startString = this.text.substring(0, start);
 			String endString = this.text.substring(end, this.text.length());
 			this.text = startString + endString;

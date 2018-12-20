@@ -60,20 +60,21 @@ public class Servant extends UnicastRemoteObject implements Service {
 		return textFiles.get(id);
 	}
 
+	@SuppressWarnings("null")
 	@Override
-	public void addText(int start, int end,  String text, int id) throws RemoteException {
+	public void addText(int start, int end, String text, int id) throws RemoteException {
 		TextFile textFile = textFiles.get(id);
 		
 		if(textFile != null) {
 			textFile.insertTextAtRange(start, end, text);
-		}		
+		}
 	}
 
 	@Override
 	public void deleteText(int start, int end, int id) throws RemoteException {
 		TextFile textFile = textFiles.get(id);
 		
-		if(textFile != null) {
+		if(textFile != null && start <= textFile.getText().length() && end <= textFile.getText().length()) {
 			textFile.removeTextAtRange(start, end);
 		}
 	}

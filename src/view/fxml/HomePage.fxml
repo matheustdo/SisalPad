@@ -18,7 +18,7 @@
                   <MenuItem mnemonicParsing="false" onAction="#newMenuOnAction" text="New" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="infoMenuItem" mnemonicParsing="false" onAction="#infoMenuOnAction" text="Info" />
-                  <MenuItem fx:id="colaboratorsMenuItem" mnemonicParsing="false" onAction="#colaboratorsMenuOnAction" text="Colaborators" />
+                  <MenuItem fx:id="collaboratorsMenuItem" mnemonicParsing="false" onAction="#collaboratorsMenuOnAction" text="Collaborators" />
               <MenuItem fx:id="deleteMenuItem" mnemonicParsing="false" onAction="#deleteMenuOnAction" text="Delete" />
                   <SeparatorMenuItem mnemonicParsing="false" />
               <MenuItem mnemonicParsing="false" onAction="#closeMenuOnAction" text="Close" />
